@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NOT.</title>
+  <meta name="description" content="NOT. — meme project" />
+  <style>
+    :root{
+      --bg:#000;   /* fond noir */
+      --fg:#fff;   /* texte blanc */
+    }
+    .inverted{
+      --bg:#fff;   /* fond blanc */
+      --fg:#000;   /* texte noir */
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, sans-serif;
+      min-height:100dvh;
+      display:flex;
+    }
+
+    /* Conteneur commun pour aligner parfaitement le hero et la desc */
+    .container{
+      width:100%;
+      max-width:1200px;               /* largeur de confort */
+      margin:0 auto;
+      padding-left: clamp(16px,3vw,48px);  /* même padding à gauche pour TOUT */
+      padding-right: clamp(16px,3vw,48px);
+      display:flex;
+      flex-direction:column;
+      gap: clamp(24px,3vw,40px);
+    }
+
+    /* Section hero */
+    .hero{
+      flex:1 0 auto;
+      display:flex;
+      align-items:center;
+      /* IMPORTANT: pas de centrage horizontal, on s’aligne sur le padding gauche du container */
+      text-align:left;
+      min-height: 50dvh; /* garde une hauteur confortable */
+    }
+
+    /* Ligne NOT. + tag */
+    .line{
+      display:flex;
+      align-items:baseline; /* on aligne visuellement la baseline NOT./tag */
+      gap:0;
+      user-select:none;
+      white-space:nowrap;
+    }
+
+    /* Bloc NOT. (NOT + point groupés) */
+    .brand{
+      display:flex;
+      align-items:baseline;
+    }
+    .word, .dot{
+      font-weight:900;
+      line-height:1;
+      letter-spacing:.02em;
+      font-size: clamp(64px,18vw,300px);
+      color:var(--fg);
+    }
+
+    /* Tag à droite : grand, aligné, s’allonge uniquement vers la droite */
+    .tag{
+      display:inline-block;
+      margin-left:clamp(12px,2vw,24px);
+      font-size: clamp(32px,6vw,80px);
+      font-weight:900;
+      color:var(--fg);
+      letter-spacing:.01em;
+      line-height:1;
+      position:relative;
+      top:-0.04em;      /* ajuste finement l’alignement vertical avec le point */
+      transition:none;  /* switch sec */
+      /* garde l’espace même quand caché */
+      visibility:visible;
+      opacity:1;
+    }
+    /* En “home”: on rend le tag invisible mais on GARDE l’espace pour éviter tout décalage */
+    .tag.hidden{
+      visibility:hidden;
+      opacity:0;
+    }
+
+    /* Section description alignée exactement sous NOT. grâce au même container */
+    .desc {
+  flex: 0 0 auto;
+  max-width: 1100px;
+  width: 100%;
+  margin-top: 10px;   /* <<< ajoute une marge en haut */
+  margin-bottom: 300px;
+  font-size: clamp(16px,2.2vw,20px);
+  line-height: 1.6;
+  color: var(--fg);
+  text-align: left;
+}
+
+
+    .desc h2{
+      margin:0 0 8px 0;
+      font-size:clamp(18px,3vw,28px);
+    }
+    .muted{opacity:.7}
+
+    :focus-visible{ outline: 3px solid currentColor; outline-offset: 4px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <main class="hero" aria-label="Hero NOT">
+      <div class="line">
+        <span class="brand">
+          <span class="word">NOT</span><span class="dot">.</span>
+        </span>
+        <span id="tag" class="tag hidden" aria-live="polite">&#160;</span>
+        <!-- NB: &#160; = espace insécable pour garder l’espace même en 'home' -->
+      </div>
+    </main>
+
+    <section class="desc" aria-label="About NOT">
+      <h2>ABOUT NOT.</h2>
+      <p class="muted">
+        NOT. a chad. NOT a kol. NOT a pet. NOT your mom. Just a MEME.
+      </p>
+      <p>
+        We believe in one thing only: <strong>NOT giving up on the community</strong>.<br>
+        Because it’s NOT hype, NOT promises, NOT fake noise, it’s people.<br>
+        And it’s only together that this meme can rise above all the others.<br>
+        This is NOT just another token. This is NOT just another story. This is <strong>NOT.</strong>
+        
+      </p>
+    
+      <!-- espace de 3-4 lignes puis texte centré -->
+<div style="margin-top: 120px; text-align: center;">
+  <h3 style="font-size: clamp(18px, 2.5vw, 32px); font-weight: 900; color: var(--fg);">
+    NOT. YOUR FINANCIAL ADVICE : 
+  </h3>
+</div>
+ 
+
+  <script>
+    // Intervalle (10s)
+    const INTERVAL_MS = 10000;
+
+    // Liste des tags affichés à droite du point (dans l’ordre des switches)
+    const tags = ["a Chad", "a KOL", "a pet", "your mom", "financial advice"];
+
+    // État
+    let inverted = false;  // false = fond noir / texte blanc
+    let step = -1;         // -1 = home (tag invisible mais espace conservé)
+
+    const root = document.documentElement;
+    const tagEl = document.getElementById('tag');
+
+    function applyState(){
+      // Couleurs
+      root.classList.toggle('inverted', inverted);
+
+      // Tag : en home on laisse un NBSP et on masque visuellement (sans retirer l’espace)
+      if (step === -1){
+        tagEl.textContent = "\u00A0";      // espace insécable
+        tagEl.classList.add('hidden');     // invisible mais garde la place
+      } else {
+        tagEl.textContent = tags[step];
+        tagEl.classList.remove('hidden');  // visible
+      }
+    }
+
+    function nextTick(){
+      inverted = !inverted;
+
+      if (step < tags.length - 1){
+        step += 1;        // avancer dans la liste
+      } else {
+        step = -1;        // retour home (tag invisible, espace gardé)
+      }
+
+      applyState();
+    }
+
+    // État initial: home (fond noir, tag masqué mais réservé)
+    applyState();
+
+    // Lancer la boucle
+    setInterval(nextTick, INTERVAL_MS);
+
+    // À la remise au premier plan : repartir propre en home
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden){
+        inverted = false;
+        step = -1;
+        applyState();
+      }
+    }, { passive:true });
+  </script>
+</body>
+</html>
