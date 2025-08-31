@@ -6,208 +6,129 @@
   <title>NOT.</title>
   <meta name="description" content="NOT. — meme project" />
   <style>
-    :root{
-      --bg:#000;   /* fond noir */
-      --fg:#fff;   /* texte blanc */
-    }
-    .inverted{
-      --bg:#fff;   /* fond blanc */
-      --fg:#000;   /* texte noir */
-    }
+    :root{ --bg:#000; --fg:#fff; }
+    .inverted{ --bg:#fff; --fg:#000; }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;
-      background:var(--bg);
-      color:var(--fg);
+      margin:0; background:var(--bg); color:var(--fg);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, sans-serif;
-      min-height:100dvh;
-      display:flex;
+      min-height:100dvh; display:flex;
     }
 
-    /* ====== HEADER + HAMBURGER ====== */
-    .header{
-      position:fixed;
-      top:12px;
-      right:16px;
-      z-index:50;
-      pointer-events:auto;
-    }
+    /* ===== HEADER + HAMBURGER ===== */
+    .header{ position:fixed; top:12px; right:16px; z-index:50; }
     .hamburger{
-      width:44px;height:44px;
-      display:inline-grid;
-      place-items:center;
-      background:transparent;
-      color:var(--fg);
-      border:2px solid currentColor;
-      border-radius:10px;
-      cursor:pointer;
+      width:44px; height:44px; display:inline-grid; place-items:center;
+      background:transparent; color:var(--fg); border:2px solid currentColor;
+      border-radius:10px; cursor:pointer;
     }
     .hamburger:focus-visible{ outline:3px solid currentColor; outline-offset:4px; }
-    .hamburger .bars{
-      position:relative;
-      width:20px;height:2px;background:currentColor;
+    .hamburger .bars{ position:relative; width:20px; height:2px; background:currentColor; }
+    .hamburger .bars::before,.hamburger .bars::after{
+      content:""; position:absolute; left:0; right:0; height:2px; background:currentColor;
     }
-    .hamburger .bars::before,
-    .hamburger .bars::after{
-      content:"";
-      position:absolute;left:0;right:0;height:2px;background:currentColor;
-    }
-    .hamburger .bars::before{ top:-6px }
-    .hamburger .bars::after { top: 6px }
+    .hamburger .bars::before{ top:-6px } .hamburger .bars::after{ top:6px }
 
-    .backdrop{
-      position:fixed; inset:0;
-      background:rgba(0,0,0,.45);
-      opacity:0; pointer-events:none;
-      transition:opacity .2s ease;
-      z-index:40;
-    }
-    .backdrop.show{ opacity:1; pointer-events:auto }
+    .backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.45); opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:40; }
+    .backdrop.show{ opacity:1; pointer-events:auto; }
 
     .menu{
-      position:fixed; top:0; right:0;
-      width:min(84vw, 320px); height:100dvh;
+      position:fixed; top:0; right:0; width:min(84vw,320px); height:100dvh;
       background:var(--bg); color:var(--fg);
       border-left:1px solid color-mix(in oklab, var(--fg) 20%, transparent);
-      transform:translateX(100%);
-      transition:transform .25s ease;
-      z-index:60;
-      display:flex; flex-direction:column; gap:8px;
-      padding:20px;
+      transform:translateX(100%); transition:transform .25s ease; z-index:60;
+      display:flex; flex-direction:column; gap:8px; padding:20px;
     }
     .menu.show{ transform:translateX(0) }
-    .menu h3{ margin:0 0 12px 0; font-size:14px; opacity:.6; letter-spacing:.08em }
+    .menu h3{ margin:0 0 12px; font-size:14px; opacity:.6; letter-spacing:.08em }
     .menu a{
-      display:block;
-      color:var(--fg); text-decoration:none;
-      font-weight:700; font-size:18px;
-      padding:10px 6px; border-radius:10px;
+      display:block; color:var(--fg); text-decoration:none; font-weight:700;
+      font-size:18px; padding:10px 6px; border-radius:10px;
     }
-    .menu a:hover, .menu a:focus-visible{
-      background:color-mix(in oklab, var(--fg) 12%, transparent);
-      outline:none;
+    .menu a:hover,.menu a:focus-visible{
+      background:color-mix(in oklab, var(--fg) 12%, transparent); outline:none;
     }
+    /* liens externes + état désactivé */
+    .menu a.ext{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .menu .x-icon{ font-weight:900; letter-spacing:.02em; opacity:.9; }
+    .menu a.disabled{ opacity:.6; cursor:default; pointer-events:none; }
+    .menu small{ font-size:14px; font-weight:400; opacity:.8; }
 
-    /* pour Twitter X et Telegram */
-    .menu a.ext{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+    /* ===== LAYOUT ===== */
+    .container{ width:100%; max-width:1200px; margin:0 auto;
+      padding-left:clamp(16px,3vw,48px); padding-right:clamp(16px,3vw,48px);
+      display:flex; flex-direction:column; gap:clamp(24px,3vw,40px);
     }
-    .menu .x-icon{
-      font-weight:900;
-      letter-spacing:0.02em;
-      opacity:.9;
-    }
-
-    /* ====== LAYOUT PRINCIPAL ====== */
-    .container{
-      width:100%;
-      max-width:1200px;
-      margin:0 auto;
-      padding-left: clamp(16px,3vw,48px);
-      padding-right: clamp(16px,3vw,48px);
-      display:flex;
-      flex-direction:column;
-      gap: clamp(24px,3vw,40px);
-    }
-
-    .hero{
-      flex:1 0 auto;
-      display:flex;
-      align-items:center;
-      text-align:left;
-      min-height: 50dvh;
-    }
-
-    .line{
-      display:flex;
-      align-items:baseline;
-      gap:0;
-      user-select:none;
-      white-space:nowrap;
-    }
-
+    .hero{ flex:1 0 auto; display:flex; align-items:center; text-align:left; min-height:50dvh; }
+    .line{ display:flex; align-items:baseline; gap:0; user-select:none; white-space:nowrap; }
     .brand{ display:flex; align-items:baseline; }
-    .word, .dot{
-      font-weight:900;
-      line-height:1;
-      letter-spacing:.02em;
-      font-size: clamp(64px,18vw,300px);
-      color:var(--fg);
-    }
+    .word,.dot{ font-weight:900; line-height:1; letter-spacing:.02em; font-size:clamp(64px,18vw,300px); color:var(--fg); }
 
     .tag{
-      display:inline-block;
-      margin-left:clamp(12px,2vw,24px);
-      font-size: clamp(32px,6vw,80px);
-      font-weight:900;
-      color:var(--fg);
-      letter-spacing:.01em;
-      line-height:1;
-      position:relative;
-      top:-0.04em;
-      transition:none;
-      visibility:visible;
-      opacity:1;
+      display:inline-block; margin-left:clamp(12px,2vw,24px);
+      font-size:clamp(32px,6vw,80px); font-weight:900; color:var(--fg);
+      letter-spacing:.01em; line-height:1; position:relative; top:-0.04em;
+      visibility:visible; opacity:1;
     }
     .tag.hidden{ visibility:hidden; opacity:0; }
 
     .desc{
-      flex:0 0 auto;
-      max-width:1100px;
-      width:100%;
-      margin-top:10px;
-      margin-bottom:300px;
-      font-size:clamp(16px,2.2vw,20px);
-      line-height:1.6;
-      color:var(--fg);
-      text-align:left;
+      flex:0 0 auto; max-width:1100px; width:100%;
+      margin-top:10px; margin-bottom:300px;
+      font-size:clamp(16px,2.2vw,20px); line-height:1.6; color:var(--fg); text-align:left;
     }
-    .desc h2{ margin:0 0 8px 0; font-size:clamp(18px,3vw,28px); }
-    .muted{opacity:.7}
+    .desc h2{ margin:0 0 8px; font-size:clamp(18px,3vw,28px); }
+    .muted{ opacity:.7 }
 
-    :focus-visible{ outline: 3px solid currentColor; outline-offset: 4px; }
+    /* ===== CTA Pump.fun (gris) ===== */
+    .cta{ text-align:center; margin-top:24px; }
+    .btn-cta{
+      display:inline-block; padding:12px 18px; font-weight:900; text-decoration:none;
+      border:2px solid #666; background:#666; color:#fff; border-radius:12px; letter-spacing:.02em;
+      transition:transform .06s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn-cta:hover{ transform:translateY(-1px); background:#777; border-color:#777; }
+    .btn-cta:active{ transform:translateY(0); }
+
+    :focus-visible{ outline:3px solid currentColor; outline-offset:4px; }
   </style>
 </head>
 <body>
-  <!-- HEADER / HAMBURGER -->
+  <!-- HEADER -->
   <header class="header" aria-label="Main menu">
     <button id="menuBtn" class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="sideMenu">
       <span class="bars" aria-hidden="true"></span>
     </button>
   </header>
   <div id="backdrop" class="backdrop" aria-hidden="true"></div>
+
+  <!-- ===== MENU (Home / Gallery / X / Telegram / CONTRACT) ===== -->
   <nav id="sideMenu" class="menu" role="dialog" aria-modal="true" aria-label="Menu">
     <h3>MENU</h3>
     <a href="/" data-close>Home</a>
     <a href="/gallery.html" data-close>Gallery</a>
 
-    <!-- TWITTER (X) -->
     <a class="ext" href="https://x.com/NOT_YourMeme?t=lRI0U36cvf4v_OC11Nv4NA&s=09"
-       target="_blank" rel="noopener noreferrer"
-       aria-label="Open Twitter profile in a new tab">
-      <span>TWITTER</span>
-      <span aria-hidden="true" class="x-icon">X</span>
+       target="_blank" rel="noopener noreferrer" aria-label="Open Twitter profile in a new tab">
+      <span>TWITTER</span><span aria-hidden="true" class="x-icon">X</span>
     </a>
 
-    <!-- TELEGRAM -->
     <a class="ext" href="https://t.me/NOT_yourmeme"
-       target="_blank" rel="noopener noreferrer"
-       aria-label="Open Telegram in a new tab">
+       target="_blank" rel="noopener noreferrer" aria-label="Open Telegram in a new tab">
       <span>TELEGRAM</span>
+    </a>
+
+    <a class="ext disabled" href="#" aria-disabled="true">
+      <span>CONTRACT</span><small>(Coming Soon)</small>
     </a>
   </nav>
 
   <div class="container">
     <main class="hero" aria-label="Hero NOT">
       <div class="line">
-        <span class="brand">
-          <span class="word">NOT</span><span class="dot">.</span>
-        </span>
+        <span class="brand"><span class="word">NOT</span><span class="dot">.</span></span>
         <span id="tag" class="tag hidden" aria-live="polite">&#160;</span>
       </div>
     </main>
@@ -224,78 +145,51 @@
         This is NOT just another token. This is NOT just another story. This is <strong>NOT.</strong>
       </p>
 
+      <!-- Titre + bouton Pump.fun -->
       <div style="margin-top: 120px; text-align: center;">
         <h3 style="font-size: clamp(18px, 2.5vw, 32px); font-weight: 900; color: var(--fg);">
           NOT. FINANCIAL ADVICE :
         </h3>
+        <div class="cta">
+          <!-- Remplace # par ton URL Pump.fun quand tu l’as -->
+          <a id="pumpfunBtn" class="btn-cta" href="#" target="_blank" rel="noopener noreferrer">
+            Buy on Pump.fun
+          </a>
+        </div>
       </div>
     </section>
   </div>
 
   <script>
-    /* ====== HAMBURGER LOGIC ====== */
+    /* ===== MENU JS ===== */
     const menuBtn = document.getElementById('menuBtn');
     const sideMenu = document.getElementById('sideMenu');
     const backdrop = document.getElementById('backdrop');
-
     function openMenu(on){
       sideMenu.classList.toggle('show', on);
       backdrop.classList.toggle('show', on);
       menuBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
-      if(on){
-        const firstLink = sideMenu.querySelector('a');
-        firstLink && firstLink.focus();
-      }
+      if(on){ (sideMenu.querySelector('a')||menuBtn).focus(); }
     }
-    menuBtn.addEventListener('click', () => openMenu(!sideMenu.classList.contains('show')));
-    backdrop.addEventListener('click', () => openMenu(false));
-    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') openMenu(false); });
-    sideMenu.addEventListener('click', (e) => {
-      if(e.target.matches('[data-close]')) openMenu(false);
-    });
+    menuBtn.addEventListener('click', ()=> openMenu(!sideMenu.classList.contains('show')));
+    backdrop.addEventListener('click', ()=> openMenu(false));
+    addEventListener('keydown', e=>{ if(e.key==='Escape') openMenu(false); });
+    sideMenu.addEventListener('click', e=>{ if(e.target.matches('[data-close]')) openMenu(false); });
 
-    /* ====== ANIMATION NOT. ====== */
+    /* ===== ANIMATION NOT. ===== */
     const INTERVAL_MS = 6000;
-
-    const tags = ["a Chad", "a KOL", "a pet", "your mom", "ponzi", "ngmi", "wagmi", "financial advice"];
-
-    let inverted = false;
-    let step = -1;
-
-    const root = document.documentElement;
-    const tagEl = document.getElementById('tag');
+    const tags = ["a Chad","a KOL","a pet","your mom","ponzi","ngmi","wagmi","financial advice"];
+    let inverted = false, step = -1;
+    const root = document.documentElement, tagEl = document.getElementById('tag');
 
     function applyState(){
       root.classList.toggle('inverted', inverted);
-      if (step === -1){
-        tagEl.textContent = "\u00A0";
-        tagEl.classList.add('hidden');
-      } else {
-        tagEl.textContent = tags[step];
-        tagEl.classList.remove('hidden');
-      }
+      if(step===-1){ tagEl.textContent="\u00A0"; tagEl.classList.add('hidden'); }
+      else{ tagEl.textContent = tags[step]; tagEl.classList.remove('hidden'); }
     }
-
-    function nextTick(){
-      inverted = !inverted;
-      if (step < tags.length - 1){
-        step += 1;
-      } else {
-        step = -1;
-      }
-      applyState();
-    }
-
-    applyState();
-    setInterval(nextTick, INTERVAL_MS);
-
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden){
-        inverted = false;
-        step = -1;
-        applyState();
-      }
-    }, { passive:true });
+    function nextTick(){ inverted=!inverted; step = (step < tags.length-1) ? step+1 : -1; applyState(); }
+    applyState(); setInterval(nextTick, INTERVAL_MS);
+    document.addEventListener('visibilitychange', ()=>{ if(!document.hidden){ inverted=false; step=-1; applyState(); } }, {passive:true});
   </script>
 </body>
 </html>
