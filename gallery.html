@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NOT.  Memes</title>
+<meta name="description" content="NOT. Memes" />
+<style>
+  :root{ --bg:#000; --fg:#fff; --muted:#9aa0a6; }
+  html,body{ height:100%; }
+  body{ margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }
+
+  .header{ position:fixed; top:12px; right:16px; z-index:50; }
+  .hamburger{ width:44px; height:44px; display:inline-grid; place-items:center; background:transparent; color:var(--fg); border:2px solid currentColor; border-radius:10px; cursor:pointer; }
+  .hamburger:focus-visible{ outline:3px solid currentColor; outline-offset:4px; }
+  .hamburger .bars{ position:relative; width:20px; height:2px; background:currentColor; }
+  .hamburger .bars::before, .hamburger .bars::after{ content:""; position:absolute; left:0; right:0; height:2px; background:currentColor; }
+  .hamburger .bars::before{ top:-6px } .hamburger .bars::after{ top:6px }
+
+  .backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.45); opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:40; }
+  .backdrop.show{ opacity:1; pointer-events:auto; }
+
+  .menu{ position:fixed; top:0; right:0; width:min(84vw, 320px); height:100dvh; background:var(--bg); color:var(--fg); border-left:1px solid rgba(255,255,255,.2); transform:translateX(100%); transition:transform .25s ease; z-index:60; display:flex; flex-direction:column; gap:8px; padding:20px; }
+  .menu.show{ transform:translateX(0) }
+  .menu h3{ margin:0 0 12px 0; font-size:14px; opacity:.6; letter-spacing:.08em }
+  .menu a{ display:block; color:var(--fg); text-decoration:none; font-weight:700; font-size:18px; padding:10px 6px; border-radius:10px; }
+  .menu a:hover, .menu a:focus-visible{ background:rgba(255,255,255,.12); outline:none; }
+
+  .wrap{ max-width:1200px; margin:0 auto; padding:96px 20px 56px; }
+  h1{ font-size: clamp(28px, 4vw, 44px); margin: 12px 0 12px; letter-spacing:.5px; }
+  p.muted{ color:var(--muted); margin:0 0 24px; }
+
+  .grid{ display:grid; gap:18px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  figure{ margin:0; background:#111; border-radius:14px; overflow:hidden; border:1px solid #222; display:flex; flex-direction:column; }
+  figure img{ width:100%; height:auto; display:block; background:#000; }
+  figcaption{ padding:10px 12px; font-weight:700; }
+  .actions{ display:flex; gap:8px; padding:12px; border-top:1px solid #222; }
+  .btn{ flex:1; display:inline-flex; justify-content:center; align-items:center; padding:10px 12px; border-radius:10px; border:1px solid #333; background:#0c0c0c; color:#fff; cursor:pointer; font-weight:700; text-decoration:none; }
+  .btn:disabled{ opacity:.6; cursor:default; }
+  .small-note{ color:var(--muted); font-size:13px; margin-top:8px; }
+</style>
+</head>
+<body>
+
+<header class="header" aria-label="Main menu">
+  <button id="menuBtn" class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="sideMenu">
+    <span class="bars" aria-hidden="true"></span>
+  </button>
+</header>
+<div id="backdrop" class="backdrop" aria-hidden="true"></div>
+<nav id="sideMenu" class="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <h3>MENU</h3>
+  <a href="/" data-close>Home</a>
+  <a href="/gallery.html" data-close>Gallery</a>
+</nav>
+
+<main class="wrap">
+  <h1>NOT. Memes</h1>
+  <p class="muted">Click <b>Copy</b> to copy the image to your clipboard (best on HTTPS), or <b>Download</b> to save it.</p>
+
+  <section id="gallery" class="grid">
+    <figure>
+      <img src="assets/images/not-a-chad.jpg" alt="NOT. a chad" loading="lazy">
+      <figcaption>NOT. a chad</figcaption>
+      <div class="actions">
+        <button class="btn copy" data-src="assets/images/not-a-chad.png">Copy</button>
+        <a class="btn" href="assets/images/not-a-chad.jpg" download>Download</a>
+      </div>
+    </figure>
+
+    <figure>
+      <img src="assets/images/not-a-pet.jpg" alt="NOT. a pet" loading="lazy">
+      <figcaption>NOT. a pet</figcaption>
+      <div class="actions">
+        <button class="btn copy" data-src="assets/images/not-a-pet.png">Copy</button>
+        <a class="btn" href="assets/images/not-a-pet.jpg" download>Download</a>
+      </div>
+    </figure>
+
+    <figure>
+      <img src="assets/images/not-a-kol.jpg" alt="NOT. a kol" loading="lazy">
+      <figcaption>NOT. a kol</figcaption>
+      <div class="actions">
+        <button class="btn copy" data-src="assets/images/not-a-kol.png">Copy</button>
+        <a class="btn" href="assets/images/not-a-kol.jpg" download>Download</a>
+      </div>
+    </figure>
+
+    <figure>
+      <img src="assets/images/not-ponzi.jpg" alt="NOT. ponzi" loading="lazy">
+      <figcaption>NOT. ponzi</figcaption>
+      <div class="actions">
+        <button class="btn copy" data-src="assets/images/not-ponzi.png">Copy</button>
+        <a class="btn" href="assets/images/not-ponzi.jpg" download>Download</a>
+      </div>
+    </figure>
+
+    <figure>
+      <img src="assets/images/not-ngmi.jpg" alt="NOT. ngmi" loading="lazy">
+      <figcaption>NOT. ngmi</figcaption>
+      <div class="actions">
+        <button class="btn copy" data-src="assets/images/not-ngmi.png">Copy</button>
+        <a class="btn" href="assets/images/not-ngmi.jpg" download>Download</a>
+      </div>
+    </figure>
+
+    <figure>
+      <img src="assets/images/not-wenmoon.jpg" alt="NOT. wenmoon" loading="lazy">
+      <figcaption>NOT. wenmoon</figcaption>
+      <div class="actions">
+        <button class="btn copy" data-src="assets/images/not-wenmoon.png">Copy</button>
+        <a class="btn" href="assets/images/not-wenmoon.jpg" download>Download</a>
+      </div>
+    </figure>
+
+    <figure>
+      <img src="assets/images/not-financial-advice.jpg" alt="NOT. financial advice" loading="lazy">
+      <figcaption>NOT. financial advice</figcaption>
+      <div class="actions">
+        <button class="btn copy" data-src="assets/images/not-financial-advice.png">Copy</button>
+        <a class="btn" href="assets/images/not-financial-advice.jpg" download>Download</a>
+      </div>
+    </figure>
+
+    <figure>
+      <img src="assets/images/not-elon.jpg" alt="NOT. Elon" loading="lazy">
+      <figcaption>NOT. Elon</figcaption>
+      <div class="actions">
+        <button class="btn copy" data-src="assets/images/not-elon.png">Copy</button>
+        <a class="btn" href="assets/images/not-elon.jpg" download>Download</a>
+      </div>
+    </figure>
+
+  </section>
+
+  <p style="color:#9aa0a6; font-size:16px; margin-top:16px; text-align:center;">
+  Flood the Web3 and tag <b>#NOT.</b>
+</p>
+
+</main>
+
+<script>
+  // Hamburger
+  const menuBtn = document.getElementById('menuBtn');
+  const sideMenu = document.getElementById('sideMenu');
+  const backdrop = document.getElementById('backdrop');
+  function openMenu(on){
+    sideMenu.classList.toggle('show', on);
+    backdrop.classList.toggle('show', on);
+    menuBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    if(on){ (sideMenu.querySelector('a')||menuBtn).focus(); }
+  }
+  menuBtn.addEventListener('click', ()=> openMenu(!sideMenu.classList.contains('show')));
+  backdrop.addEventListener('click', ()=> openMenu(false));
+  addEventListener('keydown', e=>{ if(e.key==='Escape') openMenu(false); });
+  sideMenu.addEventListener('click', e=>{ if(e.target.matches('[data-close]')) openMenu(false); });
+
+  // Copy image to clipboard
+  async function copyImage(url, button){
+    button.disabled = true; const label = button.textContent;
+    try{
+      const res = await fetch(url, {mode:'cors'});
+      const blob = await res.blob();
+      if (!('ClipboardItem' in window)) throw new Error('No ClipboardItem');
+      await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+      button.textContent = 'Copied ✓';
+    }catch(err){
+      try{
+        const absolute = new URL(url, location.href).href;
+        await navigator.clipboard.writeText(absolute);
+        button.textContent = 'Link Copied ✓';
+      }catch(e){
+        button.textContent = 'Copy failed';
+      }
+    }finally{
+      setTimeout(()=>{ button.textContent = label; button.disabled = false; }, 1200);
+    }
+  }
+  document.querySelectorAll('.btn.copy').forEach(b=> b.addEventListener('click', ()=> copyImage(b.dataset.src, b)));
+</script>
+
+</body>
+</html>

@@ -26,42 +26,112 @@
       display:flex;
     }
 
-    /* Conteneur commun pour aligner parfaitement le hero et la desc */
+    /* ====== HEADER + HAMBURGER ====== */
+    .header{
+      position:fixed;
+      top:12px;
+      right:16px;
+      z-index:50;
+      pointer-events:auto;
+    }
+    .hamburger{
+      width:44px;height:44px;
+      display:inline-grid;
+      place-items:center;
+      background:transparent;
+      color:var(--fg);
+      border:2px solid currentColor;
+      border-radius:10px;
+      cursor:pointer;
+    }
+    .hamburger:focus-visible{ outline:3px solid currentColor; outline-offset:4px; }
+    .hamburger .bars{
+      position:relative;
+      width:20px;height:2px;background:currentColor;
+    }
+    .hamburger .bars::before,
+    .hamburger .bars::after{
+      content:"";
+      position:absolute;left:0;right:0;height:2px;background:currentColor;
+    }
+    .hamburger .bars::before{ top:-6px }
+    .hamburger .bars::after { top: 6px }
+
+    .backdrop{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.45);
+      opacity:0; pointer-events:none;
+      transition:opacity .2s ease;
+      z-index:40;
+    }
+    .backdrop.show{ opacity:1; pointer-events:auto }
+
+    .menu{
+      position:fixed; top:0; right:0;
+      width:min(84vw, 320px); height:100dvh;
+      background:var(--bg); color:var(--fg);
+      border-left:1px solid color-mix(in oklab, var(--fg) 20%, transparent);
+      transform:translateX(100%);
+      transition:transform .25s ease;
+      z-index:60;
+      display:flex; flex-direction:column; gap:8px;
+      padding:20px;
+    }
+    .menu.show{ transform:translateX(0) }
+    .menu h3{ margin:0 0 12px 0; font-size:14px; opacity:.6; letter-spacing:.08em }
+    .menu a{
+      display:block;
+      color:var(--fg); text-decoration:none;
+      font-weight:700; font-size:18px;
+      padding:10px 6px; border-radius:10px;
+    }
+    .menu a:hover, .menu a:focus-visible{
+      background:color-mix(in oklab, var(--fg) 12%, transparent);
+      outline:none;
+    }
+
+    /* pour Twitter X et Telegram */
+    .menu a.ext{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .menu .x-icon{
+      font-weight:900;
+      letter-spacing:0.02em;
+      opacity:.9;
+    }
+
+    /* ====== LAYOUT PRINCIPAL ====== */
     .container{
       width:100%;
-      max-width:1200px;               /* largeur de confort */
+      max-width:1200px;
       margin:0 auto;
-      padding-left: clamp(16px,3vw,48px);  /* même padding à gauche pour TOUT */
+      padding-left: clamp(16px,3vw,48px);
       padding-right: clamp(16px,3vw,48px);
       display:flex;
       flex-direction:column;
       gap: clamp(24px,3vw,40px);
     }
 
-    /* Section hero */
     .hero{
       flex:1 0 auto;
       display:flex;
       align-items:center;
-      /* IMPORTANT: pas de centrage horizontal, on s’aligne sur le padding gauche du container */
       text-align:left;
-      min-height: 50dvh; /* garde une hauteur confortable */
+      min-height: 50dvh;
     }
 
-    /* Ligne NOT. + tag */
     .line{
       display:flex;
-      align-items:baseline; /* on aligne visuellement la baseline NOT./tag */
+      align-items:baseline;
       gap:0;
       user-select:none;
       white-space:nowrap;
     }
 
-    /* Bloc NOT. (NOT + point groupés) */
-    .brand{
-      display:flex;
-      align-items:baseline;
-    }
+    .brand{ display:flex; align-items:baseline; }
     .word, .dot{
       font-weight:900;
       line-height:1;
@@ -70,7 +140,6 @@
       color:var(--fg);
     }
 
-    /* Tag à droite : grand, aligné, s’allonge uniquement vers la droite */
     .tag{
       display:inline-block;
       margin-left:clamp(12px,2vw,24px);
@@ -80,42 +149,59 @@
       letter-spacing:.01em;
       line-height:1;
       position:relative;
-      top:-0.04em;      /* ajuste finement l’alignement vertical avec le point */
-      transition:none;  /* switch sec */
-      /* garde l’espace même quand caché */
+      top:-0.04em;
+      transition:none;
       visibility:visible;
       opacity:1;
     }
-    /* En “home”: on rend le tag invisible mais on GARDE l’espace pour éviter tout décalage */
-    .tag.hidden{
-      visibility:hidden;
-      opacity:0;
+    .tag.hidden{ visibility:hidden; opacity:0; }
+
+    .desc{
+      flex:0 0 auto;
+      max-width:1100px;
+      width:100%;
+      margin-top:10px;
+      margin-bottom:300px;
+      font-size:clamp(16px,2.2vw,20px);
+      line-height:1.6;
+      color:var(--fg);
+      text-align:left;
     }
-
-    /* Section description alignée exactement sous NOT. grâce au même container */
-    .desc {
-  flex: 0 0 auto;
-  max-width: 1100px;
-  width: 100%;
-  margin-top: 10px;   /* <<< ajoute une marge en haut */
-  margin-bottom: 300px;
-  font-size: clamp(16px,2.2vw,20px);
-  line-height: 1.6;
-  color: var(--fg);
-  text-align: left;
-}
-
-
-    .desc h2{
-      margin:0 0 8px 0;
-      font-size:clamp(18px,3vw,28px);
-    }
+    .desc h2{ margin:0 0 8px 0; font-size:clamp(18px,3vw,28px); }
     .muted{opacity:.7}
 
     :focus-visible{ outline: 3px solid currentColor; outline-offset: 4px; }
   </style>
 </head>
 <body>
+  <!-- HEADER / HAMBURGER -->
+  <header class="header" aria-label="Main menu">
+    <button id="menuBtn" class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="sideMenu">
+      <span class="bars" aria-hidden="true"></span>
+    </button>
+  </header>
+  <div id="backdrop" class="backdrop" aria-hidden="true"></div>
+  <nav id="sideMenu" class="menu" role="dialog" aria-modal="true" aria-label="Menu">
+    <h3>MENU</h3>
+    <a href="/" data-close>Home</a>
+    <a href="/gallery.html" data-close>Gallery</a>
+
+    <!-- TWITTER (X) -->
+    <a class="ext" href="https://x.com/NOT_YourMeme?t=lRI0U36cvf4v_OC11Nv4NA&s=09"
+       target="_blank" rel="noopener noreferrer"
+       aria-label="Open Twitter profile in a new tab">
+      <span>TWITTER</span>
+      <span aria-hidden="true" class="x-icon">X</span>
+    </a>
+
+    <!-- TELEGRAM -->
+    <a class="ext" href="https://t.me/NOT_yourmeme"
+       target="_blank" rel="noopener noreferrer"
+       aria-label="Open Telegram in a new tab">
+      <span>TELEGRAM</span>
+    </a>
+  </nav>
+
   <div class="container">
     <main class="hero" aria-label="Hero NOT">
       <div class="line">
@@ -123,78 +209,86 @@
           <span class="word">NOT</span><span class="dot">.</span>
         </span>
         <span id="tag" class="tag hidden" aria-live="polite">&#160;</span>
-        <!-- NB: &#160; = espace insécable pour garder l’espace même en 'home' -->
       </div>
     </main>
 
     <section class="desc" aria-label="About NOT">
       <h2>ABOUT NOT.</h2>
       <p class="muted">
-        NOT. a chad. NOT a kol. NOT a pet. NOT your mom. Just a MEME.
+        NOT. a chad. NOT a kol. NOT a pet. NOT your mom. NOT. ponzi. NOT. ngmi. NOT. wagmi. Just a MEME.
       </p>
       <p>
         We believe in one thing only: <strong>NOT giving up on the community</strong>.<br>
         Because it’s NOT hype, NOT promises, NOT fake noise, it’s people.<br>
         And it’s only together that this meme can rise above all the others.<br>
         This is NOT just another token. This is NOT just another story. This is <strong>NOT.</strong>
-        
       </p>
-    
-      <!-- espace de 3-4 lignes puis texte centré -->
-<div style="margin-top: 120px; text-align: center;">
-  <h3 style="font-size: clamp(18px, 2.5vw, 32px); font-weight: 900; color: var(--fg);">
-    NOT. YOUR FINANCIAL ADVICE : 
-  </h3>
-</div>
- 
+
+      <div style="margin-top: 120px; text-align: center;">
+        <h3 style="font-size: clamp(18px, 2.5vw, 32px); font-weight: 900; color: var(--fg);">
+          NOT. FINANCIAL ADVICE :
+        </h3>
+      </div>
+    </section>
+  </div>
 
   <script>
-    // Intervalle (10s)
-    const INTERVAL_MS = 10000;
+    /* ====== HAMBURGER LOGIC ====== */
+    const menuBtn = document.getElementById('menuBtn');
+    const sideMenu = document.getElementById('sideMenu');
+    const backdrop = document.getElementById('backdrop');
 
-    // Liste des tags affichés à droite du point (dans l’ordre des switches)
-    const tags = ["a Chad", "a KOL", "a pet", "your mom", "financial advice"];
+    function openMenu(on){
+      sideMenu.classList.toggle('show', on);
+      backdrop.classList.toggle('show', on);
+      menuBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
+      if(on){
+        const firstLink = sideMenu.querySelector('a');
+        firstLink && firstLink.focus();
+      }
+    }
+    menuBtn.addEventListener('click', () => openMenu(!sideMenu.classList.contains('show')));
+    backdrop.addEventListener('click', () => openMenu(false));
+    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') openMenu(false); });
+    sideMenu.addEventListener('click', (e) => {
+      if(e.target.matches('[data-close]')) openMenu(false);
+    });
 
-    // État
-    let inverted = false;  // false = fond noir / texte blanc
-    let step = -1;         // -1 = home (tag invisible mais espace conservé)
+    /* ====== ANIMATION NOT. ====== */
+    const INTERVAL_MS = 6000;
+
+    const tags = ["a Chad", "a KOL", "a pet", "your mom", "ponzi", "ngmi", "wagmi", "financial advice"];
+
+    let inverted = false;
+    let step = -1;
 
     const root = document.documentElement;
     const tagEl = document.getElementById('tag');
 
     function applyState(){
-      // Couleurs
       root.classList.toggle('inverted', inverted);
-
-      // Tag : en home on laisse un NBSP et on masque visuellement (sans retirer l’espace)
       if (step === -1){
-        tagEl.textContent = "\u00A0";      // espace insécable
-        tagEl.classList.add('hidden');     // invisible mais garde la place
+        tagEl.textContent = "\u00A0";
+        tagEl.classList.add('hidden');
       } else {
         tagEl.textContent = tags[step];
-        tagEl.classList.remove('hidden');  // visible
+        tagEl.classList.remove('hidden');
       }
     }
 
     function nextTick(){
       inverted = !inverted;
-
       if (step < tags.length - 1){
-        step += 1;        // avancer dans la liste
+        step += 1;
       } else {
-        step = -1;        // retour home (tag invisible, espace gardé)
+        step = -1;
       }
-
       applyState();
     }
 
-    // État initial: home (fond noir, tag masqué mais réservé)
     applyState();
-
-    // Lancer la boucle
     setInterval(nextTick, INTERVAL_MS);
 
-    // À la remise au premier plan : repartir propre en home
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden){
         inverted = false;
