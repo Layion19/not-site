@@ -56,6 +56,17 @@
     .menu a.disabled{ opacity:.6; cursor:default; pointer-events:none; }
     .menu small{ font-size:14px; font-weight:400; opacity:.8; }
 
+    /* ===== Roadmap (dans le menu) ===== */
+    .divider{ height:1px; background:color-mix(in oklab, var(--fg) 18%, transparent); margin:12px 0; }
+    .roadmap{ display:grid; gap:10px; }
+    .roadmap h4{ margin:6px 0 2px; font-size:13px; letter-spacing:.04em; opacity:.85; }
+    .phase{
+      border:1px solid color-mix(in oklab, var(--fg) 20%, transparent);
+      border-radius:12px; padding:10px 12px;
+      background:color-mix(in oklab, var(--fg) 6%, var(--bg));
+    }
+    .phase ul{ margin:6px 0 0; padding-left:18px; line-height:1.45; font-size:14px; opacity:.9; }
+
     /* ===== LAYOUT ===== */
     .container{ width:100%; max-width:1200px; margin:0 auto;
       padding-left:clamp(16px,3vw,48px); padding-right:clamp(16px,3vw,48px);
@@ -104,7 +115,7 @@
   </header>
   <div id="backdrop" class="backdrop" aria-hidden="true"></div>
 
-  <!-- ===== MENU (Home / Gallery / X / Telegram / CONTRACT) ===== -->
+  <!-- ===== MENU (Home / Gallery / X / Telegram / CONTRACT + ROADMAP) ===== -->
   <nav id="sideMenu" class="menu" role="dialog" aria-modal="true" aria-label="Menu">
     <h3>MENU</h3>
     <a href="/" data-close>Home</a>
@@ -123,6 +134,47 @@
     <a class="ext disabled" href="#" aria-disabled="true">
       <span>CONTRACT</span><small>(Coming Soon)</small>
     </a>
+
+    <!-- === Roadmap ajoutée dans le hamburger === -->
+    <div class="divider" role="separator" aria-hidden="true"></div>
+    <h3>ROADMAP</h3>
+    <div class="roadmap">
+      <div class="phase">
+        <h4>Phase 1 — Bonding Curve</h4>
+        <ul>
+          <li>Launch on Pump.fun</li>
+          <li>Community kick-off & early holders</li>
+          <li>Narrative building begins</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <h4>Phase 2 — Listing</h4>
+        <ul>
+          <li>Raydium listing (DEX on Solana)</li>
+          <li>Initial liquidity added</li>
+          <li>Broader visibility on X & Telegram</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <h4>Phase 3 — Community Growth</h4>
+        <ul>
+          <li>Strategic collabs with Web3 communities</li>
+          <li>Community giveaways and contests</li>
+          <li>Strong meme culture & NOT. branding</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <h4>Phase 4 — Utility & Beyond</h4>
+        <ul>
+          <li>First utilities (burn events, staking, access perks)</li>
+          <li>Building a mini-ecosystem around the token</li>
+          <li>Expanding long-term narrative; explore cross-chain</li>
+        </ul>
+      </div>
+    </div>
   </nav>
 
   <div class="container">
@@ -151,7 +203,7 @@
           NOT. FINANCIAL ADVICE :
         </h3>
         <div class="cta">
-          <!-- Remplace # par ton URL Pump.fun quand tu l’as -->
+          <!-- Remplace l’URL si besoin -->
           <a id="pumpfunBtn" class="btn-cta" href="https://pump.fun/profile/not_yourmeme" target="_blank" rel="noopener noreferrer">
             Buy on Pump.fun
           </a>
@@ -170,6 +222,7 @@
       backdrop.classList.toggle('show', on);
       menuBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
       if(on){ (sideMenu.querySelector('a')||menuBtn).focus(); }
+      document.body.style.overflow = on ? 'hidden' : '';
     }
     menuBtn.addEventListener('click', ()=> openMenu(!sideMenu.classList.contains('show')));
     backdrop.addEventListener('click', ()=> openMenu(false));
